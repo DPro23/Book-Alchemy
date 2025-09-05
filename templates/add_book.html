@@ -3,3 +3,30 @@
 {% block page_title %}
     Add Book
 {% endblock %}
+
+{% block page_contents %}
+    <main class="container">
+        <h1 class="text-center">Add a new book</h1>
+        <div class="mb-4">
+            <form action="/add_book" method="POST">
+              <label class="form-label" for="title">Book Title:</label>
+              <input class="form-control" type="text" id="title" name="title" required><br><br>
+              <label class="form-label" for="publication_year">Publication Year:</label>
+              <input class="form-control" type="date" id="publication_year" name="publication_year" required><br><br>
+              <label class="form-label" for="author_id">Author:</label>
+              <select class="form-select" id="author_id" name="author_id" required>
+                <option value="">Select Author</option>
+                {% for author in authors %}
+                <option value="{{author.id}}">{{author.name}}</option>
+                {% endfor %}
+              </select>
+              <input class="w-100 mt-5 btn btn-danger" type="submit" value="Add Book">
+            </form>
+        </div>
+        {% if request.args.get('book_title') %}
+          <h3 class="my-2 p-2 text-center text-bg-success">
+            {{ book_title }} is now in the library!
+          </h3>
+        {% endif %}
+    </main>
+{% endblock %}

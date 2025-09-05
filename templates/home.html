@@ -5,14 +5,13 @@
 {% endblock %}
 
 {% block page_contents %}
-    <main>
+    <main class="container">
         <h1 class="text-center">Books</h1>
         {% for book in books %}
             <ul class="list-group my-2">
                 <li class="list-group-item list-group-item-info mb-2">
-                  <h3>{{ book.title }}</h3>
-                  <small>{{ book.author.name }}</small>
-                  <small>{{ book.publication_year }}</small>
+                    <small>{{ book.author.name }} ({{ book.publication_year }})</small>
+                    <h3>{{ book.title }}</h3>
                 </li>
             </ul>
         {% endfor %}
