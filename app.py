@@ -14,8 +14,11 @@ db.init_app(app)
 @app.route('/')
 def home():
     """Renders the home page"""
-    all_books = db.session.query(Book).all()
-    return render_template('home.html', books=all_books)
+    # Sort by book.title, author.name or book.id by default
+    sort = request.args.get('sort', 'id')
+    sorted_books = db.session.query(Book).all()
+
+    return render_template('home.html', books=sorted_books)
 
 
 @app.route('/add_author', methods=['GET', 'POST'])
