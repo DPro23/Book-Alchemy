@@ -1,15 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>Digital Library | Home</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    </head>
-    <body>
+{% extends '/layout.html' %}
+
+{% block page_title %}
+    Home
+{% endblock %}
+
+{% block page_contents %}
+    <main>
         <h1>Welcome to my digital library!</h1>
         {% for book in books %}
             <h3>{{ book.title }}</h3><br>
         {% endfor %}
-    </body>
-</html>
+    </main>
+{% endblock %}
+
