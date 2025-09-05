@@ -6,9 +6,15 @@
 
 {% block page_contents %}
     <main>
-        <h1>Welcome to my digital library!</h1>
+        <h1 class="text-center">Books</h1>
         {% for book in books %}
-            <h3>{{ book.title }}</h3><br>
+            <ul class="list-group my-2">
+                <li class="list-group-item list-group-item-info mb-2">
+                  <h3>{{ book.title }}</h3>
+                  <small>{{ book.author.name }}</small>
+                  <small>{{ book.publication_year }}</small>
+                </li>
+            </ul>
         {% endfor %}
     </main>
 {% endblock %}
