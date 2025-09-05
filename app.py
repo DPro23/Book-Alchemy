@@ -30,17 +30,15 @@ def add_author():
     death_date = request.form.get('date_of_death')
 
     # Convert dates to Date objects
-    if birthdate:
-        birthdate = datetime.strptime(birthdate, '%Y-%m-%d').date()
+    birthdate = datetime.strptime(birthdate, '%Y-%m-%d').date()
+
     if death_date:
         death_date = datetime.strptime(death_date, '%Y-%m-%d').date()
-    else:
-        death_date = None
 
     new_author = Author(
         name=name,
         birth_date=birthdate,
-        date_of_death=death_date
+        date_of_death=death_date if death_date else None
     )
     db.session.add(new_author)
     db.session.commit()
