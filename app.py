@@ -16,34 +16,30 @@ def home():
     sort = request.args.get('sort')
     search = request.args.get('search')
     deleted = request.args.get('deleted')
+    # Base query
+    book_query = db.session.query(Book)
 
-    # Sorting the results
-    if sort:
-        sorted_books = []
-        if sort == 'author':
-            sorted_books = (db.session.query(Book).join(Book.author)
-                            .order_by(Author.name.asc()).all())
+    # Sorting the results by a column
+    if sort == 'author':
+        book_query = (book_query.join(Book.author)
+                        .order_by(Author.name.asc()))
 
-        elif sort == 'title':
-            sorted_books = db.session.query(Book).order_by(
-                Book.title.asc()).all()
+    elif sort == 'title':
+        book_query = book_query.order_by(
+            Book.title.asc())
 
-        elif sort == 'year':
-            sorted_books = db.session.query(Book).order_by(
-                Book.publication_year.asc()).all()
+    elif sort == 'year':
+        book_query = book_query.order_by(
+            Book.publication_year.desc())
 
-        return render_template('home.html', books=sorted_books)
-
-    # Sort by keyword
+    # Sort by search keyword case-insensitive
     if search:
-        searched_books = db.session.query(Book).filter(Book.title.ilike('%' + search + '%')).order_by(
-            Book.title.asc()).all()
+        book_query = book_query.filter(Book.title.ilike('%' + search + '%')).order_by(
+            Book.title.asc())
 
-        return render_template('home.html', books=searched_books)
-
-    # Default list
-    all_books = db.session.query(Book).all()
-    return render_template('home.html', books=all_books, deleted=deleted)
+    # Fetch all results
+    books_result = book_query.all()
+    return render_template('home.html', books=books_result, deleted=deleted)
 
 
 @app.route('/add_author', methods=['GET', 'POST'])
