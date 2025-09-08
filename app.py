@@ -1,6 +1,6 @@
 """Serves the app on localhost"""
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 import os
 from data_models import db, Author, Book
 
@@ -10,12 +10,12 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/library.sqlite')}"
 db.init_app(app)
 
-
 @app.route('/')
 def home():
     """Renders the home page with sorting options"""
     sort = request.args.get('sort')
     search = request.args.get('search')
+    deleted = request.args.get('deleted')
 
     # Sorting the results
     if sort:
@@ -36,14 +36,14 @@ def home():
 
     # Sort by keyword
     if search:
-        searched_books = db.session.query(Book).filter(Book.title.like('%' + search + '%')).order_by(
+        searched_books = db.session.query(Book).filter(Book.title.ilike('%' + search + '%')).order_by(
             Book.title.asc()).all()
 
         return render_template('home.html', books=searched_books)
 
     # Default list
     all_books = db.session.query(Book).all()
-    return render_template('home.html', books=all_books)
+    return render_template('home.html', books=all_books, deleted=deleted)
 
 
 @app.route('/add_author', methods=['GET', 'POST'])
@@ -100,19 +100,20 @@ def add_book():
 
 @app.route('/book/<int:book_id>/delete', methods=['POST'])
 def delete_book(book_id):
-    """Delete a book from the database by its id"""
+    """
+    Delete a book from the database by its id
+    and redirects to the home page showing the deleted book
+    """
     book = db.session.query(Book).filter_by(id=book_id).first()
+    deleted_title = None
+
     # Book deleted successfully
     if book:
-        # msg = f"The Book {book.title} has been deleted successfully."
         db.session.delete(book)
         db.session.commit()
-    else:
-        # msg = f"The Book with id {book_id} doesn't exist."
-        pass
+        deleted_title = book.title
 
-    # Book not found
-    return redirect(url_for("home"))
+    return redirect(url_for("home", deleted=deleted_title))
 
 
 if __name__ == "__main__":

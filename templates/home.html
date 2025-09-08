@@ -5,9 +5,13 @@
 {% endblock %}
 
 {% block page_contents %}
+    {% if deleted %}
+        <p class="text-bg-success text-center p-2">{{ deleted }} was deleted successfully!</p>
+    {% endif %}
     <h1 class="text-center">Books</h1>
     <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group">
+            <a class="btn btn-info" href="{{ url_for('home') }}" role="button">Reset</a>
           <button type="button" class="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             Sort by: {{ request.args.get('sort').title() if request.args.get('sort') else '' }}
           </button>
