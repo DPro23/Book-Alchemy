@@ -13,12 +13,28 @@ db.init_app(app)
 
 @app.route('/')
 def home():
-    """Renders the home page"""
-    # Sort by book.title, author.name or book.id by default
-    sort = request.args.get('sort', 'id')
-    sorted_books = db.session.query(Book).all()
+    """Renders the home page with sorting options"""
+    sort = request.args.get('sort')
+    # Sorted list
+    if sort:
+        sorted_books = []
+        if sort == 'author':
+            sorted_books = (db.session.query(Book).join(Book.author)
+                            .order_by(Author.name.asc()).all())
 
-    return render_template('home.html', books=sorted_books)
+        elif sort == 'title':
+            sorted_books = db.session.query(Book).order_by(
+                Book.title.asc()).all()
+
+        elif sort == 'year':
+            sorted_books = db.session.query(Book).order_by(
+                Book.publication_year.asc()).all()
+
+        return render_template('home.html', books=sorted_books)
+
+    # Default list
+    all_books = db.session.query(Book).all()
+    return render_template('home.html', books=all_books)
 
 
 @app.route('/add_author', methods=['GET', 'POST'])

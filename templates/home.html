@@ -9,11 +9,12 @@
         <h1 class="text-center">Books</h1>
         <div class="btn-group">
           <button type="button" class="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            Sort by:
+            Sort by: {{ request.args.get('sort').title() if request.args.get('sort') else '' }}
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ url_for('home', sort='author')}}">Author</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('home', sort='title')}}">Title</a></li>
+            <li><a class="dropdown-item {{ 'active' if request.args and 'author' in request.args.get('sort') else '' }}" href="{{ url_for('home', sort='author')}}">Author</a></li>
+            <li><a class="dropdown-item {{ 'active' if request.args and 'title' in request.args.get('sort') else '' }}" href="{{ url_for('home', sort='title')}}">Title</a></li>
+            <li><a class="dropdown-item {{ 'active' if request.args and 'year' in request.args.get('sort') else '' }}" href="{{ url_for('home', sort='year')}}">Year</a></li>
           </ul>
         </div>
         {% for book in books %}
