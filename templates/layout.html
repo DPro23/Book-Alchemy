@@ -9,22 +9,24 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg bg-primary navbar-dark mb-3">
-            <div class="container-fluid">
-              <a class="navbar-brand" href="#">Routes</a>
+            <div class="container">
+              <a class="navbar-brand" href="/">Library</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
               <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                  <a class="nav-link {{ 'active' if request.path == '/' else '' }}"  href="{{ url_for('home')}}">All Books</a>
+                  <a class="nav-link {{ 'active' if request.path == '/' else '' }}"  href="{{ url_for('home')}}">Show Books</a>
                   <a class="nav-link {{ 'active' if request.path == '/add_book' else '' }}" href="{{ url_for('add_book') }}">Add Book</a>
                   <a class="nav-link {{ 'active' if request.path == '/add_author' else '' }}" href="{{ url_for('add_author') }}">Add Author</a>
                 </div>
               </div>
             </div>
         </nav>
-        {% block page_contents %}
-        {% endblock %}
+        <main class="container">
+            {% block page_contents %}
+            {% endblock %}
+        </main>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     </body>
 </html>
